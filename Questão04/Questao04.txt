@@ -1,0 +1,55 @@
+O problema do props drilling acontece quando passamos props desnecessários de pai para filho, props que não iremos utilizar.
+O contexto soluciona isso pois podemos escolher quais props utilizarmos em funções filhas
+
+Ex:
+Funcão A:
+
+import FuncaoB from "./FuncaoB"
+import FuncaoC from "./FuncaoC"
+
+import CorContexto from "./MeuContexto"
+
+
+const FuncaoA = () => {
+
+    const cor = "green"
+
+    return (
+    <CorContexto.Provider value={{cor:cor, nome:"Vitor Pereira",cor2:"purple"}}>
+        <div>
+            <h1 style={{backgroundColor:cor}}>Função A</h1>
+            <FuncaoB />
+            <FuncaoC />
+        </div>
+    </CorContexto.Provider>
+    )
+}
+
+export default FuncaoA
+
+Função B:
+
+import CorContexto from "./MeuContexto"
+
+//Modo Legado
+const FuncaoB = () => {
+    return (
+        <CorContexto.Consumer> 
+            {
+                ({cor2,nome}) => {
+                    return(
+                        <div>
+                            <h1 style={{backgroundColor:cor2}}>Flamengo de {nome}</h1>
+                        </div>
+                    )
+                }
+            }
+        </CorContexto.Consumer>
+    )
+}
+
+export default FuncaoB
+
+Aqui eu utilizo somente o cor2 e o nome na função B, com o auxílio do Consumer, que consome o contexto que eu passei para na Função A, assim não precisamos toda vida ficar passando todos os props, somente um contexto que nos deixa selecionar os props
+desejados.
+
